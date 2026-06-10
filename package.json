@@ -1,0 +1,12 @@
+{
+  "name": "technical-talks-event",
+  "version": "1.0.0",
+  "description": "A static website for a 1-day event with technical talks.",
+  "main": "generate-site.js",
+  "scripts": {
+    "generate": "node generate-site.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

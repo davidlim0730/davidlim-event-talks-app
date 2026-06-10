@@ -1,0 +1,15 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.pnpm-store/
+
+# IDEs and others
+.DS_Store
+.env
+.vscode/
+
+# Generated files
+index.html

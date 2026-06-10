@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Talks Event Schedule</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.search-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.search-container input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+#schedule .talk-card {
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.talk-card .talk-time {
+    font-weight: bold;
+    color: #0056b3;
+    margin-bottom: 5px;
+}
+
+.talk-card .talk-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.talk-card .talk-speakers {
+    font-style: italic;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.talk-card .talk-category {
+    font-size: 0.9em;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.talk-card .talk-description {
+    line-height: 1.5;
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #777;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Technical Talks Event Schedule</h1>
+
+        <div class="search-container">
+            <input type="text" id="category-search" placeholder="Search by category...">
+        </div>
+
+        <div id="schedule">
+            <!-- Schedule will be dynamically loaded here by JavaScript -->
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Technical Talks Event</p>
+        </footer>
+    </div>
+
+    <script>
+        const talks = [
+    {
+        id: 'talk1',
+        title: 'Introduction to WebAssembly',
+        speakers: ['Dr. Alex W.E.B.'],
+        category: ['Web Development', 'Performance'],
+        duration: 60, // minutes
+        description: 'A deep dive into the fundamentals of WebAssembly and its applications for high-performance web development.'
+    },
+    {
+        id: 'talk2',
+        title: 'Modern CSS Techniques',
+        speakers: ['Ms. Style Sheet'],
+        category: ['Web Development', 'Design'],
+        duration: 60,
+        description: 'Explore the latest and most effective CSS techniques for responsive and beautiful web interfaces.'
+    },
+    {
+        id: 'talk3',
+        title: 'Building Scalable Node.js APIs',
+        speakers: ['Mr. Node J.S.', 'Ms. Express F.'],
+        category: ['Backend', 'APIs'],
+        duration: 60,
+        description: 'Learn best practices for designing and building scalable and maintainable RESTful APIs with Node.js and Express.'
+    },
+    {
+        id: 'lunch',
+        title: 'Lunch Break',
+        speakers: [],
+        category: [],
+        duration: 60,
+        description: 'Enjoy a delicious lunch and network with fellow attendees.'
+    },
+    {
+        id: 'talk4',
+        title: 'Demystifying Cloud Deployments',
+        speakers: ['Ms. Azure Cloud'],
+        category: ['DevOps', 'Cloud'],
+        duration: 60,
+        description: 'Understand the intricacies of deploying applications to the cloud, covering various platforms and strategies.'
+    },
+    {
+        id: 'talk5',
+        title: 'Data Science with Python',
+        speakers: ['Dr. Python Data'],
+        category: ['Data Science', 'AI/ML'],
+        duration: 60,
+        description: 'An introduction to data science workflows using Python, covering data analysis, visualization, and machine learning.'
+    },
+    {
+        id: 'talk6',
+        title: 'The Future of Frontend Frameworks',
+        speakers: ['Mr. React Vue'],
+        category: ['Web Development', 'Frontend'],
+        duration: 60,
+        description: 'A look into the evolving landscape of frontend frameworks and what the future holds for web development.'
+    }
+];
+
+const eventStartTime = '10:00 AM';
+
+const generateSchedule = () => {
+    const scheduleDiv = document.getElementById('schedule');
+    scheduleDiv.innerHTML = ''; // Clear existing schedule
+
+    let currentTime = new Date();
+    const [hours, minutesPart] = eventStartTime.split(':');
+    const [mins, ampm] = minutesPart.split(' ');
+    currentTime.setHours(parseInt(hours) + (ampm === 'PM' && hours !== '12' ? 12 : 0));
+    currentTime.setMinutes(parseInt(mins));
+    currentTime.setSeconds(0);
+
+    const filteredTalks = talks.filter(talk => {
+        const searchInput = document.getElementById('category-search').value.toLowerCase();
+        return searchInput === '' || talk.category.some(cat => cat.toLowerCase().includes(searchInput));
+    });
+
+    filteredTalks.forEach(talk => {
+        const talkElement = document.createElement('div');
+        talkElement.classList.add('talk-card');
+
+        const startTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        currentTime.setMinutes(currentTime.getMinutes() + talk.duration);
+        const endTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        talkElement.innerHTML = `
+            <div class="talk-time">${startTime} - ${endTime}</div>
+            <div class="talk-title">${talk.title}</div>
+            <div class="talk-speakers">${talk.speakers.join(', ')}</div>
+            <div class="talk-category">Categories: ${talk.category.join(', ')}</div>
+            <div class="talk-description">${talk.description}</div>
+        `;
+        scheduleDiv.appendChild(talkElement);
+
+        if (talk.id !== 'lunch' && talk !== filteredTalks[filteredTalks.length - 1]) { // Add transition for all but lunch and last talk
+            currentTime.setMinutes(currentTime.getMinutes() + 10); // 10 minute transition
+        }
+    });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    generateSchedule();
+    document.getElementById('category-search').addEventListener('input', generateSchedule);
+});
+
+    </script>
+</body>
+</html>
